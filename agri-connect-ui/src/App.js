@@ -1,6 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import LoginPage from './pages/LoginPage';
+import CreateAccountPage from './pages/CreateAccountPage';
 import DashboardPage from './pages/DashboardPage';
 import WeatherPage from './pages/WeatherPage';
 import MarketPricesPage from './pages/MarketPricesPage';
@@ -18,6 +19,7 @@ function App() {
     <Router>
       <Routes>
         <Route path="/" element={<LoginPage />} />
+        <Route path="/create-account" element={<CreateAccountPage />} />
         <Route path="/dashboard" element={<DashboardPage />} />
         <Route path="/weather" element={<WeatherPage />} />
         <Route path="/market-prices" element={<MarketPricesPage />} />

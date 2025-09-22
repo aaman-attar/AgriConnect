@@ -4,7 +4,7 @@ import { farmerLogin } from '../services/api';
 
 const LoginPage = () => {
   const navigate = useNavigate();
-  const [form, setForm] = useState({ name: '', phone: '', location: '' });
+  const [form, setForm] = useState({ phone: '', password: '' });
   const [message, setMessage] = useState('');
 
   const handleChange = (e) => {
@@ -15,7 +15,7 @@ const LoginPage = () => {
     e.preventDefault();
     setMessage('');
     try {
-      const res = await farmerLogin(form);
+      const res = await farmerLogin({ phone: form.phone, password: form.password });
       if (res.data && res.data.farmer) {
         localStorage.setItem('farmer', JSON.stringify(res.data.farmer));
         localStorage.setItem('farmerPhone', res.data.farmer.phone);
@@ -59,22 +59,10 @@ const LoginPage = () => {
           <form onSubmit={handleSubmit} className="max-w-md mx-auto">
             <div className="mb-8 text-center md:text-left">
               <h2 className="text-3xl font-extrabold text-slate-900">Welcome to Agric Connect</h2>
-              <p className="text-slate-600 mt-2">Sign in or create your account using your details below.</p>
+              <p className="text-slate-600 mt-2">Sign in with your phone number and password.</p>
             </div>
 
-            <label className="label" htmlFor="name">Name</label>
-            <input
-              id="name"
-              type="text"
-              name="name"
-              placeholder="Your full name"
-              value={form.name}
-              onChange={handleChange}
-              required
-              className="input mb-4"
-            />
-
-            <label className="label" htmlFor="phone">Number</label>
+            <label className="label" htmlFor="phone">Phone Number</label>
             <input
               id="phone"
               type="tel"
@@ -86,13 +74,13 @@ const LoginPage = () => {
               className="input mb-4"
             />
 
-            <label className="label" htmlFor="location">City</label>
+            <label className="label" htmlFor="password">Password</label>
             <input
-              id="location"
-              type="text"
-              name="location"
-              placeholder="Village / City"
-              value={form.location}
+              id="password"
+              type="password"
+              name="password"
+              placeholder="Your password"
+              value={form.password}
               onChange={handleChange}
               required
               className="input mb-6"
@@ -100,7 +88,7 @@ const LoginPage = () => {
 
             <div className="flex flex-col sm:flex-row gap-3">
               <button type="submit" className="btn-primary w-full py-2">Sign In</button>
-              <button type="submit" className="btn-secondary w-full py-2">Create Account</button>
+              <button type="button" onClick={() => navigate('/create-account')} className="btn-secondary w-full py-2">Create Account</button>
             </div>
 
             {message && <p className="alert-error mt-4 text-center">{message}</p>}

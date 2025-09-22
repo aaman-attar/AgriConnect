@@ -15,6 +15,10 @@ const API = axios.create({
 
 // Farmer login
 export const farmerLogin = (data) => API.post('farmer-login/', data);
+// Farmer registration
+// Note: Adjust the endpoint if your backend exposes a different path
+// (e.g., 'farmers/' or 'register/').
+export const registerFarmer = (data) => API.post('farmer-register/', data);
 
 // Market prices
 export const getMarketPrices = (params) => API.get('market-prices/', { params });

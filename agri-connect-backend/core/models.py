@@ -4,9 +4,14 @@ class Farmer(models.Model):
     name = models.CharField(max_length=100)
     phone = models.CharField(max_length=15, unique=True)
     location = models.CharField(max_length=100)
+    # Store a hashed password (Django-compatible) for authentication
+    password = models.CharField(max_length=128, blank=True, default='')
 
     def __str__(self):
         return f"{self.name} ({self.phone})"
+
+    class Meta:
+        db_table = 'core_farmer'
 class MarketPrice(models.Model):
     crop = models.CharField(max_length=100)
     market = models.CharField(max_length=100)

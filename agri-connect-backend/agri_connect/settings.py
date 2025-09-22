@@ -26,14 +26,18 @@ SECRET_KEY = 'django-insecure-v21=61ui_)z&x^7af4i*xbfy69@5x*12l3m(^$#@)w=)=04fhd
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["agriassist-9pc8.onrender.com"]
+ALLOWED_HOSTS = ["agriassist-9pc8.onrender.com", "localhost", "127.0.0.1"]
 
 CORS_ALLOWED_ORIGINS = [
-    "https://agriassist-frontend-gm7d.onrender.com"
+    "https://agriassist-frontend-gm7d.onrender.com",
+    "http://localhost:3000",
+    "http://127.0.0.1:3000",
 ]
 # Trust the frontend origin for CSRF checks when using cookie-based requests
 CSRF_TRUSTED_ORIGINS = [
     "https://agriassist-frontend-gm7d.onrender.com",
+    "http://localhost:3000",
+    "http://127.0.0.1:3000",
 ]
 # Application definition
 

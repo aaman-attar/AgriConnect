@@ -30,6 +30,7 @@ def api_root(request):
             'quicktips': '/api/quicktips/',
             'crop_prediction': '/api/predict-crop/',
             'ask_ai': '/api/ask-ai/',
+            'farmer_register': '/api/farmer-register/',
             'farmer_login': '/api/farmer-login/',
             'admin': '/admin/'
         }

@@ -7,6 +7,8 @@ from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 from django.conf import settings
 import google.generativeai as genai
+from django.contrib.auth.hashers import check_password
+from django.db import IntegrityError
 
 @method_decorator(csrf_exempt, name='dispatch')
 class FarmerLoginOrRegister(APIView):
@@ -22,6 +24,52 @@ class FarmerLoginOrRegister(APIView):
                 serializer.save()
                 return Response({'msg': 'Farmer registered!', 'farmer': serializer.data}, status=status.HTTP_201_CREATED)
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+# New explicit register and login views with password support
+@method_decorator(csrf_exempt, name='dispatch')
+class FarmerRegisterView(APIView):
+    def post(self, request):
+        data = request.data.copy()
+        # Normalize
+        if 'phone' in data and isinstance(data['phone'], str):
+            data['phone'] = data['phone'].strip()
+        if 'name' in data and isinstance(data['name'], str):
+            data['name'] = data['name'].strip()
+        if 'location' in data and isinstance(data['location'], str):
+            data['location'] = data['location'].strip()
+        required_fields = ['name', 'phone', 'password', 'location']
+        missing = [f for f in required_fields if not data.get(f)]
+        if missing:
+            return Response({'detail': f"Missing fields: {', '.join(missing)}"}, status=status.HTTP_400_BAD_REQUEST)
+        # Prevent duplicate phone explicitly
+        if Farmer.objects.filter(phone=data['phone']).exists():
+            return Response({'detail': 'A farmer with this phone already exists.'}, status=status.HTTP_409_CONFLICT)
+        serializer = FarmerSerializer(data=data)
+        if serializer.is_valid():
+            try:
+                farmer = serializer.save()
+                return Response({'msg': 'Farmer registered!', 'farmer': FarmerSerializer(farmer).data}, status=status.HTTP_201_CREATED)
+            except IntegrityError:
+                return Response({'detail': 'A farmer with this phone already exists.'}, status=status.HTTP_409_CONFLICT)
+        return Response({'detail': 'Invalid data', 'errors': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+
+@method_decorator(csrf_exempt, name='dispatch')
+class FarmerLoginView(APIView):
+    def post(self, request):
+        phone = (request.data.get('phone') or '').strip()
+        password = request.data.get('password') or ''
+        if not phone or not password:
+            return Response({'detail': 'phone and password are required'}, status=status.HTTP_400_BAD_REQUEST)
+        try:
+            farmer = Farmer.objects.get(phone=phone)
+            # Handle the case where existing farmer has no password set yet
+            if not farmer.password:
+                return Response({'detail': 'Password not set for this account. Please register again or reset password.'}, status=status.HTTP_400_BAD_REQUEST)
+            if not check_password(password, farmer.password):
+                return Response({'detail': 'Invalid phone or password'}, status=status.HTTP_401_UNAUTHORIZED)
+            return Response({'msg': 'Login successful', 'farmer': FarmerSerializer(farmer).data})
+        except Farmer.DoesNotExist:
+            return Response({'detail': 'Invalid phone or password'}, status=status.HTTP_401_UNAUTHORIZED)
 
 # from rest_framework.decorators import api_view
 # from rest_framework.response import Response
