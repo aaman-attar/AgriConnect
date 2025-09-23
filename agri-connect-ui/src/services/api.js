@@ -9,6 +9,17 @@ const resolvedBaseURL = isValidAbsoluteUrl(envUrl) && !looksMisconfigured(envUrl
   ? envUrl
   : 'https://agri-assist-9t3e.onrender.com/api/';
 
+// Export the API origin (scheme + host + optional port), useful to build absolute URLs
+// for resources like media files that may be returned as relative paths by the API.
+export const API_ORIGIN = (() => {
+  try {
+    return new URL(resolvedBaseURL).origin;
+  } catch (e) {
+    // Fallback: strip trailing '/api/' if present
+    return (resolvedBaseURL || '').replace(/\/?api\/?$/, '');
+  }
+})();
+
 const API = axios.create({
   baseURL: resolvedBaseURL,
 });
