@@ -120,10 +120,46 @@ const DashboardPage = () => {
 
       {/* Main Content with top padding for fixed header */}
       <main className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-8">
-        {/* Relative Welcome Section */}
+        {/* Responsive Welcome Section */}
         <div className="bg-gradient-to-r from-green-600 via-emerald-600 to-teal-600 text-white shadow-lg rounded-2xl mb-8">
-          <div className="px-6 py-6">
-            <div className="flex items-center justify-between">
+          <div className="px-4 py-6 sm:px-6">
+            {/* Mobile Layout (Stack vertically) */}
+            <div className="block sm:hidden space-y-4">
+              {/* Top section with welcome message */}
+              <div>
+                <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-white/20 mb-3">
+                  <div className="w-2 h-2 rounded-full bg-green-300 animate-pulse"></div>
+                  <span className="text-sm font-medium">Dashboard</span>
+                </div>
+                <h2 className="text-xl font-bold mb-2">
+                  Welcome back, {farmer?.name || 'Farmer'} 👋
+                </h2>
+                {farmer?.location && (
+                  <div className="flex items-center space-x-2 text-green-100">
+                    <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd" />
+                    </svg>
+                    <span className="font-medium text-sm">{farmer.location}</span>
+                  </div>
+                )}
+              </div>
+
+              {/* Weather Card for mobile */}
+              <Link to="/weather" className="group block">
+                <div className="p-3 rounded-xl bg-white/90 backdrop-blur-sm border border-white/50 hover:bg-white transition-all duration-300 hover:scale-105 shadow-lg w-fit">
+                  <div className="flex items-center space-x-3">
+                    <MdOutlineWbSunny className="text-xl text-orange-500" />
+                    <div>
+                      <div className="text-sm font-medium text-gray-800">Weather</div>
+                      <div className="text-xs text-gray-600 group-hover:text-gray-700">Check forecast</div>
+                    </div>
+                  </div>
+                </div>
+              </Link>
+            </div>
+
+            {/* Desktop Layout (Side by side) */}
+            <div className="hidden sm:flex items-center justify-between">
               <div className="flex items-center space-x-6">
                 <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-white/20">
                   <div className="w-2 h-2 rounded-full bg-green-300 animate-pulse"></div>
@@ -142,7 +178,7 @@ const DashboardPage = () => {
                 )}
               </div>
 
-              {/* Weather Card with White Background */}
+              {/* Weather Card for desktop */}
               <Link to="/weather" className="group">
                 <div className="p-3 rounded-xl bg-white/90 backdrop-blur-sm border border-white/50 hover:bg-white transition-all duration-300 hover:scale-105 shadow-lg">
                   <div className="flex items-center space-x-3">
