@@ -29,13 +29,13 @@ DEBUG = True
 ALLOWED_HOSTS = ["agriassist-9pc8.onrender.com", "localhost", "127.0.0.1"]
 
 CORS_ALLOWED_ORIGINS = [
-    "https://agriassist-frontend-gm7d.onrender.com",
+    "https://agri-connect-ui.onrender.com",
     "http://localhost:3000",
     "http://127.0.0.1:3000",
 ]
 # Trust the frontend origin for CSRF checks when using cookie-based requests
 CSRF_TRUSTED_ORIGINS = [
-    "https://agriassist-frontend-gm7d.onrender.com",
+    "hhttps://agri-connect-ui.onrender.com",
     "http://localhost:3000",
     "http://127.0.0.1:3000",
 ]
